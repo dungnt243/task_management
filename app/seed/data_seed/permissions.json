@@ -1,0 +1,27 @@
+[
+  {
+    "name": "Add User",
+    "key": "ADD_USER",
+    "description": "Add user"
+  },
+  {
+    "name": "Delete User",
+    "key": "DELETE_USER",
+    "description": "Delete User"
+  },
+  {
+    "name": "Edit User",
+    "key": "EDIT_USER",
+    "description": "Edit User"
+  },
+  {
+    "name": "Retrieve User",
+    "key": "RETRIEVE_USER",
+    "description": "Retrieve User"
+  },
+  {
+    "name": "Login",
+    "key": "LOGIN",
+    "description": "Login"
+  }
+]

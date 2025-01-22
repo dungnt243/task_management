@@ -1,0 +1,56 @@
+[tool.poetry]
+name = "fastapi-boilerplate"
+version = "0.1.0"
+description = ""
+authors = ["Viet Hoang <viethq1@vmodev.com>"]
+readme = "README.md"
+package-mode = false
+
+[tool.poetry.dependencies]
+fastapi = "^0.112.2"
+python = "^3.10"
+pydantic = "^2.8.2"
+psycopg2 = "^2.9.4"
+SQLAlchemy = "^2.0.32"
+loguru = "^0.7.2"
+uvicorn = "^0.30.6"
+alembic = "^1.13.2"
+python-dotenv = "^1.0.1"
+pydantic-settings = "^2.4.0"
+pyjwt = "^2.9.0"
+passlib = "^1.7.4"
+bcrypt = "^4.2.0"
+isort = "^5.13.2"
+email-validator = "^2.2.0"
+secure-smtplib = "^0.1.1"
+python-multipart = "^0.0.10"
+boto3 = "^1.35.27"
+requests = "^2.32.3"
+pymupdf = "^1.24.11"
+python-docx = "^1.1.2"
+openpyxl = "^3.1.5"
+pillow = "^11.0.0"
+
+[tool.poetry.group.dev.dependencies]
+pre-commit = "^3.8.0"
+ruff = "^0.6.3"
+fastapi-debug-toolbar = "^0.6.3"
+
+[tool.ruff]
+exclude = [
+    "venv"
+]
+line-length = 80
+indent-width = 4
+
+[tool.ruff.lint]
+ignore = ["F401"]
+
+[tool.ruff.format]
+quote-style = "single"
+indent-style = "space"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
