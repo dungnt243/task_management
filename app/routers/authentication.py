@@ -65,11 +65,11 @@ def login(form_data: UserLoginFormData):
         )
         if user is None:
             logger.error('User is not found.')
-            raise Unauthorized(message='User is not found.')
+            raise BadRequest(message='User is not found.')
 
         if not verify_password(password, user.password):
             logger.info('Password is invalid.')
-            raise Unauthorized(message='Password is invalid.')
+            raise BadRequest(message='Password is invalid.')
 
         access_token = create_token(
             data={
