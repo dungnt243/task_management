@@ -11,8 +11,6 @@ from models import (
     Employer,
     Task,
 )
-from models.task import TaskStatus
-
 from config.extensions.exception_handler import (
     BadRequest,
 )
@@ -21,7 +19,9 @@ from loguru import logger
 
 from schemas.task import (
     CreateTaskSchema,
-    UpdateTaskSchema
+    DetailTaskSchema,
+    UpdateTaskSchema,
+    ListTaskSchema
 )
 
 
@@ -119,7 +119,7 @@ def update_task(
     }
 
 
-@router.get('/detail/{task_id}')
+@router.get('/detail/{task_id}', response_model=DetailTaskSchema)
 def get_task_detail(
     task_id: int,
     current_user: Annotated[User, Depends(get_current_user)],
@@ -157,9 +157,8 @@ def get_task_detail(
         }
     }
 
-# TODO: filter by assignee, status
-# sort by create_date, due_date, status
-@router.post('/list')
+
+@router.post('/list', response_model=ListTaskSchema)
 def list_tasks(
     current_user: Annotated[User, Depends(get_current_user)],
     session: Session = Depends(get_session),
@@ -217,9 +216,3 @@ def list_tasks(
             } for task in list_tasks
         ]
     }
-    
-    
-    
-    
-    
-    

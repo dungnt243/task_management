@@ -1,7 +1,8 @@
 import os
 from functools import lru_cache
-from typing import Union, List
-from pydantic import computed_field, PostgresDsn, field_validator
+from typing import List, Union
+
+from pydantic import PostgresDsn, computed_field, field_validator
 from pydantic_settings import BaseSettings
 
 

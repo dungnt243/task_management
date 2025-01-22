@@ -1,13 +1,11 @@
 from datetime import datetime
 
 import jwt
+from config.extensions.exception_handler import Unauthorized
+from config.settings import settings
+
 from fastapi import HTTPException, Request
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
-from config.extensions.exception_handler import (
-    Unauthorized,
-)
-
-from config.settings import settings
 
 
 class JWTBearer(HTTPBearer):

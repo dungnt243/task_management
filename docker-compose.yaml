@@ -20,15 +20,16 @@ services:
     restart: always
     env_file:
       - .env.db.dev
-    environment:
-      - POSTGRES_USER=api_user
-      - POSTGRES_PASSWORD=example
-      - POSTGRES_DB=postgres
     ports:
       - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
     networks:
       - api_network
 
 networks:
   api_network:
     driver: bridge
+
+volumes:
+  postgres_data:

@@ -1,8 +1,6 @@
-from typing import Optional
-import re
+from enum import Enum
 
 from pydantic import BaseModel, EmailStr
-from enum import Enum
 
 
 class UserTypeEnum(str, Enum):

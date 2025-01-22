@@ -1,9 +1,9 @@
+from config.settings import settings
 from debug_toolbar.panels.sqlalchemy import SQLAlchemyPanel as BasePanel
-from fastapi.requests import Request
-
 from sqlalchemy import create_engine
 from sqlalchemy.pool import QueuePool
-from config.settings import settings
+
+from fastapi.requests import Request
 
 
 def get_engine():

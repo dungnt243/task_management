@@ -1,15 +1,14 @@
 from typing import Optional
-import re
 
 from pydantic import BaseModel
 from datetime import datetime
-from enum import Enum
+from models.task import TaskStatus
 
 
 class CreateTaskSchema(BaseModel):
     title: str
     description: str
-    status: str
+    status: Optional[str] = TaskStatus.TODO
     assignee_id: Optional[int] = None
     start_date: Optional[datetime] = None
     due_date: Optional[datetime] = None
@@ -21,6 +20,27 @@ class UpdateTaskSchema(BaseModel):
     assignee_id: Optional[int] = None
     start_date: Optional[datetime] = None
     due_date: Optional[datetime] = None
+
+
+class UserSchema(BaseModel):
+    id: int
+    name: str
+
+
+class DetailTaskSchema(BaseModel):
+    id: int
+    title: str
+    description: str
+    status: str
+    assignee: Optional[UserSchema] = None
+    created_date: Optional[datetime] = None
+    start_date: Optional[datetime] = None
+    due_date: Optional[datetime] = None
+    created_user: Optional[UserSchema] = None
+
+
+class ListTaskSchema(BaseModel):
+    data: Optional[list[DetailTaskSchema]] = []
 
 
 class TaskListFilterCriteria(BaseModel):

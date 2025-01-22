@@ -1,15 +1,13 @@
-from fastapi import APIRouter
 from typing import Annotated
-from sqlalchemy.orm import Session
-from fastapi import Depends
 
 from common.db.session import get_session
+from config.extensions.exception_handler import BadRequest
 from middleware.authentication import get_current_user
-from models import User, Employee, Employer
+from models import Employee, Employer, Task, User
+from sqlalchemy import func
+from sqlalchemy.orm import Session
 
-from config.extensions.exception_handler import (
-    BadRequest,
-)
+from fastapi import APIRouter, Depends
 
 router = APIRouter()
 
@@ -22,12 +20,22 @@ def get_list_employee(
     if not isinstance(current_user, Employer):
         raise BadRequest(message='Only Employer can view list employees.')
     
-    employees = session.query(Employee).all()
+    employees = (
+        session.query(
+            Employee.id,
+            Employee.name,
+            func.count(Task.id).label('total_tasks'),
+            func.count(Task.id).filter(Task.status == 'completed').label('completed_tasks')
+        )
+        .join(Task, Task.assignee_id == Employee.id)
+        .group_by(Employee.id)
+        .order_by(Employee.id.asc())
+        .all()
+    )
     
     return {
-        # TODO: avoid n+1 query
         'data': [
-            {   
+            {
                 'id': employee.id,
                 'name': employee.name,
                 'total_tasks': employee.total_tasks,

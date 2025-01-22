@@ -1,8 +1,8 @@
 from debug_toolbar.middleware import DebugToolbarMiddleware
+from routers import router
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-
-from routers import router
 
 from .extensions.exception_handler import APIException, api_error_handler
 from .settings import settings

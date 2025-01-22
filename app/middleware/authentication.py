@@ -1,10 +1,11 @@
 from typing import Annotated
 
-from fastapi import Depends, HTTPException
+from common.db.engine import engine
+from config.extensions.exception_handler import Unauthorized
+from routers.authentication import USER_TYPE_MAPPING
 from sqlalchemy.orm import Session
 
-from common.db.engine import engine
-from routers.authentication import USER_TYPE_MAPPING
+from fastapi import Depends
 
 from .security import JWTBearer
 
@@ -18,6 +19,5 @@ async def get_current_user(credentials: Annotated[str, Depends(security)]):
     session = Session(engine)
     user = session.query(user_model).where(user_model.email == user_email).first()
     if user is None:
-        # TODO: update unauthorize exception
-        raise HTTPException(status_code=401, detail='User not found')
+        raise Unauthorized(message='User not found')
     return user

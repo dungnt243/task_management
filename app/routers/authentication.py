@@ -1,31 +1,19 @@
-from fastapi import APIRouter
+from datetime import timedelta
 
-from config.extensions import exception_handler as custom_exec
-from config.logger import logger
-from schemas.user import (
-    UserRegisterFormData,
-)
-from config.settings import settings
-from sqlalchemy.orm import Session
 from common.db.engine import engine
-from models import User, Employee, Employer
-from config.extensions.exception_handler import (
-    BadRequest,
-    Unauthorized,
-)
-
-from schemas.user import (
-    UserLoginFormData,
-    UserRegisterFormData,
-)
-
-from datetime import datetime, timedelta
-
+from config.extensions.exception_handler import BadRequest, Unauthorized
+from config.logger import logger
+from config.settings import settings
+from models import Employee, Employer
+from schemas.user import UserLoginFormData, UserRegisterFormData
 from services.authentication_service import (
     create_token,
     hash_password,
     verify_password,
 )
+from sqlalchemy.orm import Session
+
+from fastapi import APIRouter
 
 router = APIRouter()
 
@@ -43,6 +31,7 @@ def register(form_data: UserRegisterFormData):
     with Session(engine) as session, session.begin():
         user_model = USER_TYPE_MAPPING.get(user_type)
         if not user_model:
+            logger.error(f'Invalid user type {user_type}. User_type should be "employee" or "employer"')
             raise BadRequest(f'Invalid user type {user_type}. User_type should be "employee" or "employer"')
         existing_user = (
             session.query(Employer).where(Employer.email == email).first()
@@ -50,6 +39,7 @@ def register(form_data: UserRegisterFormData):
         )
         # Check if the user already exists
         if existing_user:
+            logger.error('User already exists.')
             raise BadRequest(message='User already exists.')
 
         hashed_password = hash_password(password)
@@ -74,9 +64,11 @@ def login(form_data: UserLoginFormData):
             or session.query(Employee).where(Employee.email == email).first()
         )
         if user is None:
-            raise Unauthorized(status_code=401, message='User is not found.')
+            logger.error('User is not found.')
+            raise Unauthorized(message='User is not found.')
 
         if not verify_password(password, user.password):
+            logger.info('Password is invalid.')
             raise Unauthorized(message='Password is invalid.')
 
         access_token = create_token(
