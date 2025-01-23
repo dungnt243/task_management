@@ -27,7 +27,7 @@ def get_list_employee(
             func.count(Task.id).label('total_tasks'),
             func.count(Task.id).filter(Task.status == 'completed').label('completed_tasks')
         )
-        .join(Task, Task.assignee_id == Employee.id)
+        .outerjoin(Task, Task.assignee_id == Employee.id)
         .group_by(Employee.id)
         .order_by(Employee.id.asc())
         .all()
